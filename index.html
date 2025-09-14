@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Krishi Saarthi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a2d9b6f6b9.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src='https://cdn.jotfor.ms/agent/embedjs/0199434aefe17beba5e11c4dc1f4523bbab0/embed.js'>
+</script>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--muted:#94a3b8;--accent:#16a34a;--danger:#e11d48}
+    *{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{margin:0;background:linear-gradient(180deg,#071021 0%, #071529 60%);color:#e6eef8;overflow-x: hidden;}
+    header{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;background:rgba(255,255,255,0.02);backdrop-filter:blur(6px)}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:44px;height:44px;background:var(--accent);border-radius:8px;display:grid;place-items:center;font-weight:700;color:#042617}
+    h1{font-size:18px;margin:0}
+    .controls{display:flex;gap:10px;align-items:center}
+    .btn{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:8px;color:var(--muted);cursor:pointer}
+    main{padding:20px 28px;display:grid;grid-template-columns:320px 1fr;gap:20px}
+
+    /* sidebar */
+    aside{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:16px;border-radius:12px;height:calc(100vh - 120px);overflow:auto}
+    .section-title{font-size:13px;color:var(--muted);margin:8px 0}
+    .card{background:var(--card);padding:12px;border-radius:10px;margin-bottom:12px}
+    .small-stat{display:flex;justify-content:space-between;align-items:center}
+    .stat-value{font-size:20px;font-weight:600}
+    .muted{color:var(--muted);font-size:13px}
+
+    /* workspace */
+    .workspace{display:flex;flex-direction:column;gap:8px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .wide{grid-column:span 3}
+    .chart-card{height:270px;width: 300px;}
+
+    /* table */
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left;font-size:13px}
+
+    /* government schemes dropdown */
+    .gov-schemes ul{list-style:none;padding:0;margin:0;display:none;background:#0d1a2b;border-radius:8px}
+    .gov-schemes li{padding:8px;font-size:13px;color:#cbd5e1;border-bottom:1px solid rgba(255,255,255,0.05)}
+    .gov-schemes:hover ul{display:block}
+
+    /* responsive */
+    @media (max-width:900px){main{grid-template-columns:1fr;padding:12px}aside{height:auto}} 
+
+    /* other*/
+    .about{
+      margin-left: -120px;
+    }
+    .records{
+      margin-left: -120px;
+    }
+    .community{
+      margin-left: -120px;
+    }
+    .featues{
+      margin-left: -120px;
+    }
+    #contact{
+      margin-left: -120px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo">KS</div>
+       <i class="fa-solid fa-leaf text-green-900 text-4xl"></i>
+      <div>
+        
+        <h1 id="pageTitle" class="font-black text-xl font-bold">Krishi Saarthi</h1>
+        <div class="muted" id="pageSubtitle"> a step toward better farming</div>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="btn" id="google_translate_element" ><i class="fa-solid fa-language"></i> EN</button>
+      <a href="KrishiSaarthi.html" class="btn" id="home-page" ><i class="fa-solid fa-plane"> Home</i></a>
+      <a href="#contact"><button class="btn" id="offlineToggle"><i class="fa-solid fa-cloud-arrow-up"></i>Contact us</button>
+      </a>
+      <a href="#about"><button class="btn" id="downloadBtn"><i class="fa-solid fa-file-export"></i>About</button>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <aside>
+      <div class="card">
+        <div class="section-title font-bold text-2xl " id="advPlant">My Farm</div>
+        <ul>
+          <li id="leafStat" class="muted">• Leaf hole size estimation (avg: 2.3 mm)</li>
+          <li id="stressStat" class="muted">• Early stress detection (12% crops flagged)</li>
+          <li id="multiStat" class="muted">• Multi-spectral / thermal view (coverage 75%)</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="section-title font-bold text-2xl" id="farmRes">My Resources</div>
+        <div class="small-stat"><div class="muted" id="waterStat">Water usage (drip)</div><div class="stat-value" id="waterUse">320 L/day</div></div>
+        <div class="small-stat"><div class="muted" id="fertStat">Fertilizer log</div><div class="muted">Last applied: 7 days ago</div></div>
+        <div class="small-stat"><div class="muted" id="pestStat">Pesticide usage</div><div class="muted">Avg: 0.8 L/acre</div></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title" id="weather">Weather Condition</div>
+        <div class="muted" id="forecast">Local forecast</div>
+        <div style="margin-top:8px;font-weight:600">27°C • 68% RH • Rain chance 20%</div>
+        <div class="muted" style="margin-top:6px">AI advice: Consider postponing spraying if rain & wind</div>
+      </div>
+
+      <div class="card gov-schemes">
+        <div class="section-title font-bold text-2xl" id="govSchemes">Government Schemes</div>
+        <button class="btn"><i class="fa-solid fa-cloud-arrow-up"></i> Hover to View</button>
+        <ul id="schemeList">
+          <li><a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2131989">Interest Subvention Scheme (ISS)</a></li>
+          <li><a href="https://pmkisan.gov.in/homenew.aspx">Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)</a></li>
+          <li><a href="https://www.myscheme.gov.in/schemes/kcc">Kisan Credit Card (KCC) Scheme</a></li>
+          <li><a href="https://pmfby.gov.in/">Pradhan Mantri Fasal Bima Yojana (PMFBY)</a></li>
+          <li><a href="https://dmsouthwest.delhi.gov.in/scheme/paramparagat-krishi-vikas-yojana/">Paramparagat Krishi Vikas Yojana (PKVY)</a></li>
+          
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="section-title" id="farmerAdv">Farmer Advisory</div>
+        <div class="muted" id="advisoryText">Personalized tips from ICAR</div>
+        <button class="btn" style="margin-top:8px" id="chatBtn"><i class="fa-solid fa-comment" ></i> Open AI Mitra</button>
+      </div>
+
+      <div class="card">
+        <div class="section-title" id="quickActions">Quick Actions</div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn text-sm text-white" onclick="alert('Drone scouting started (mock)')"><i class="fa-solid fa-plane"></i> Drone Scout</button>
+          <button class="btn text-sm text-white" onclick="alert('Sensor sync (mock)')"><i class="fa-solid fa-microchip"></i> Sync Sensors</button>
+          <button class="btn text-sm text-white" onclick="alert('camera sync (mock)')"><i class="fa-solid fa-microchip"></i> Sync cameras</button>
+        </div>
+      </div>
+    </aside>
+
+    <section class="workspace">
+      <div class="grid">
+        <div class="card chart-card">
+          <div class="section-title text-white">Pest Damage — Leaf Hole Size Chart</div>
+          <canvas id="holeChart"></canvas>
+        </div>
+
+        <div class="card chart-card">
+          <div class="section-title text-white">Soil Moisture (Sensors)</div>
+          <canvas id="moistureChart"></canvas>
+        </div>
+
+        <div class="card chart-card">
+          <div class="section-title text-white">Disease Risk Radar</div>
+          <canvas id="riskChart"></canvas>
+        </div>
+
+        <div class="card wide text-white ">
+          <div class="section-title text-3xl text-white id="inventory">Inventory</div>
+          <table>
+            <thead><tr><th>Item</th><th>Qty</th><th>Last Updated</th></tr></thead>
+            <tbody id="inventoryBody"></tbody>
+          </table>
+        </div>
+
+        <div class=" records card wide">
+          <div class=" section-title text-white text-3xl" id="compliance">Farm Records & History</div>
+          <p class="muted">Digital pesticide diary, residue compliance and subsidy logs are available for export and audit.</p>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="btn" onclick="alert('Exporting diary (mock)')"><i class="fa-solid fa-book"></i> Export Diary</button>
+            <button class="btn" onclick="alert('Generate compliance report (mock)')"><i class="fa-solid fa-file-signature"></i> Compliance Report</button>
+          </div>
+        </div>
+
+        <div class=" community card wide">
+          <div class="  section-title text-3xl text-white" id="community">Community & Knowledge Sharing</div>
+          <p class="muted">Discussion forum, expert Q&A, localized case studies and success stories.</p>
+          <div style="margin-top:8px">Top tip today: Rotate crops to reduce pest pressure after heavy monsoon.</div>
+        </div>
+      </div>
+      <!-- About Section -->
+  <section id="about" class=" about max-w-5xl px-6 py-12 ">
+    <h2 class="text-3xl md:text-4xl font-bold text-blue-900 mb-6 flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      About Us
+    </h2>
+    <p class="text-lg leading-relaxed mb-8">
+      At <span class="font-semibold text-blue-900">Mind2Machine</span>, we are building 
+      <span class="font-semibold">SMART AGRICULTURE – an Intelligent Crop Protection System</span> 
+      to help farmers monitor and protect their crops in a smarter, safer, and more cost-effective way. 
+      Using AI, IoT sensors, drones, and machine learning, our system detects plant diseases in real-time 
+      and applies pesticides only where and when they are truly needed.
+    </p>
+
+    <!-- Features -->
+    <div class=" features grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="p-6 bg-white rounded-2xl shadow hover:shadow-md transition">
+        <div class="flex items-center gap-3 mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-4.553a1.414 1.414 0 00-2-2L13 8m-2 2L6.447 5.447a1.414 1.414 0 10-2 2L8 12m4 2l-4.553 4.553a1.414 1.414 0 002 2L12 16m2-2l4.553 4.553a1.414 1.414 0 002-2L16 12" />
+          </svg>
+          <h3 class="text-xl text-blue-900 font-semibold">AI-Powered Detection</h3>
+        </div>
+        <p class="text-gray-600">Over 90% accuracy in identifying crop diseases using machine learning models.</p>
+      </div>
+
+      <div class="p-6 bg-white rounded-2xl shadow hover:shadow-md transition">
+        <div class="flex items-center gap-3 mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 1.343-3 3 0 1.309.836 2.418 2 2.83V21h2v-7.17c1.164-.412 2-1.521 2-2.83 0-1.657-1.343-3-3-3z" />
+          </svg>
+          <h3 class="text-xl text-blue-900  font-semibold">Precision Farming</h3>
+        </div>
+        <p class="text-gray-600">Reduces pesticide usage by up to <span class="font-semibold">70%</span> through targeted application.</p>
+      </div>
+
+      <div class="p-6 bg-white rounded-2xl shadow hover:shadow-md transition">
+        <div class="flex items-center gap-3 mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c2.485 0 4.5 2.015 4.5 4.5S14.485 17 12 17s-4.5-2.015-4.5-4.5S9.515 8 12 8zm0 0V4m0 12v4m-4-4H4m12 0h4" />
+          </svg>
+          <h3 class="text-xl text-blue-900  font-semibold">Higher Yields</h3>
+        </div>
+        <p class="text-gray-600">Boosts crop yield by up to <span class="font-semibold">40%</span> while saving farmers nearly $800 per hectare annually.</p>
+      </div>
+
+      <div class="p-6 bg-white rounded-2xl shadow hover:shadow-md transition">
+        <div class="flex items-center gap-3 mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h8m-8 4h6M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <h3 class="text-xl text-blue-900  font-semibold">Easy Monitoring</h3>
+        </div>
+        <p class="text-gray-600">Farmers can track crop health anytime via mobile or web applications.</p>
+      </div>
+    </div>
+
+    <!-- Vision -->
+    <div class="vision mt-12 bg-green-100 rounded-2xl p-8">
+      <h3 class="text-2xl font-bold text-blue-900 mb-3 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+        Our Vision
+      </h3>
+      <p class="text-gray-700 text-lg">
+        We aim to empower <span class="font-semibold">50 million farmers across India</span> with affordable, 
+        scalable technology that ensures higher productivity, lower input costs, and sustainable farming for future generations.
+      </p>
+    </div>
+  </section>
+
+
+
+      <section id="contact" class=" min-w-full mx-auto  mx-auto flex bg-transparent px-6">
+        <div class="w-full bg-gray-900  h-full rounded-2xl p-8">
+          <h3 class="text-2xl font-bold text-green-600 mb-6 text-center">📞 Contact Us</h3>
+
+          <p class="text-gray-400 mb-6 text-sm text-center">
+            Have questions or feedback? We'd love to hear from you!
+          </p>
+          <form class="flex flex-col space-y-4">
+            <div class="flex gap-x-20">
+            <div >
+              <label for="name" class="block text-sm font-medium text-gray-300 mb-1">Name</label>
+              <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                placeholder="Enter your name"
+                class="flex-1 p-2 px-60py-2 rounded-lg bg-gray-800 text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-600" >
+            </div>
+
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                placeholder="Enter your email"
+                class=" flex-1 p-2 px-4 py-2 rounded-lg bg-gray-800 text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-600"
+              >
+            </div>
+            <div >
+              <label for="subject" class="block text-sm font-medium text-gray-300 mb-1">Subject</label>
+              <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                placeholder="Enter the subject"
+                class="flex-1 p-2 px-60py-2 rounded-lg bg-gray-800 text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-600" >
+            </div>
+            </div>
+            <div>
+              <label for="message" class="block text-sm font-medium text-gray-300 mb-1">Message</label>
+              <textarea 
+                id="message" 
+                name="message" 
+                rows="4" 
+                placeholder="Write your message"
+                class="w-full px-4 py-2 rounded-lg bg-gray-800 text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-600"
+              ></textarea>
+            </div>
+
+            <button 
+              type="submit"
+              class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 rounded-lg transition-colors"
+            >
+              Send Message
+            </button> 
+            <span class=" flex p-5 justify-center ">
+              <h4 class="py-2"> or reach us directly on: </h4>
+              <i class="fa-brands fa-square-facebook text-xl p-2 "></i>
+              <i class="fa-brands fa-square-twitter  text-xl p-2 "><a href="https://x.com/KSaarthi3574"></a></i>
+             <i class="fa-brands fa-linkedin  text-xl p-2"></i>
+            </span>
+            </div>
+          </form>   
+         </div>
+      </section>
+    </section>
+  </main>
+
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'hi,en'}, 'google_translate_element');
+  }
+  </script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script>
+    new Chart(document.getElementById('holeChart'), {
+      type: 'bar',
+      data: {labels:['0-1mm','1-3mm','3-6mm','6-10mm','>10mm'],datasets:[{label:'Leaf holes (count)',data:[120,90,45,12,3]}]},
+      options:{responsive:true,plugins:{legend:{display:false}}}
+    });
+
+    new Chart(document.getElementById('moistureChart'), {
+      type: 'line',
+      data: {labels:['6AM','9AM','12PM','3PM','6PM','9PM'],datasets:[{label:'Moisture %',data:[22,24,28,26,23,21],fill:true,tension:0.3}]},
+      options:{responsive:true,plugins:{legend:{display:false}}}
+    });
+
+    new Chart(document.getElementById('riskChart'), {
+      type: 'radar',
+      data: {labels:['Humidity','Temp','Wind','Soil Wet','Leaf Wet'],datasets:[{label:'Disease risk',data:[70,60,30,50,65]}]},
+      options:{responsive:true}
+    });
+
+    // Inventory mock
+    const inventory = [
+      {item:'Pesticide A',qty:'12L',updated:'2025-08-30'},
+      {item:'Fertilizer NPK',qty:'250 kg',updated:'2025-09-02'},
+      {item:'Battery (sprayer)',qty:'4',updated:'2025-07-15'}
+    ];
+    const tbody = document.getElementById('inventoryBody');
+    inventory.forEach(i=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${i.item}</td><td>${i.qty}</td><td>${i.updated}</td>`;
+      tbody.appendChild(tr)
+    });
+
+    // Buttons
+    document.getElementById('chatBtn').addEventListener('click',()=>{
+      alert('chatbot will be activated');
+    });
+  </script>
+   <footer class="bg-green-700 text-white py-6 mt-12 text-center">
+    <p>&copy; 2025 Mind2Machine Krishi Saarthi. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>
